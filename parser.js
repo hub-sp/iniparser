@@ -11,10 +11,10 @@ const _getParam = line => {
 };
 
 const _addNested = (obj, is, value) => {
-  if (typeof is == 'string') return this._addNested(obj, is.split('.'), value);
+  if (typeof is == 'string') return _addNested(obj, is.split('.'), value);
   else if (is.length == 1 && value !== undefined) return (obj[is[0]] = value);
   else if (is.length == 0) return obj;
-  else return this._addNested(obj[is[0]], is.slice(1), value);
+  else return _addNested(obj[is[0]], is.slice(1), value);
 };
 
 const parse = (data, delimeter = '\n') => {
@@ -37,22 +37,22 @@ const parse = (data, delimeter = '\n') => {
     }
 
     if (SECTION.test(line)) {
-      sect = this._getSect(line)
+      sect = _getSect(line)
         .split('.')
         .map(s => s.trim());
-      this._addNested(out, sect, {});
+      _addNested(out, sect, {});
     } else if (PARAM.test(line)) {
-      const p = this._getParam(line);
+      const p = _getParam(line);
       if (!sect) {
         out[p[0]] = p[1];
       } else {
-        this._addNested(out, sect.concat(p[0]), p[1]);
+        _addNested(out, sect.concat(p[0]), p[1]);
       }
     } else {
       if (!sect) {
         out[line] = true;
       } else {
-        this._addNested(out, sect.concat(line), true);
+        _addNested(out, sect.concat(line), true);
       }
     }
   }
@@ -84,7 +84,7 @@ const stringify = (obj = {}, section = '') => {
   // START CHILDREN MANIPULATION
 
   children.forEach(o => {
-    const child = this.stringify(o[0], o[1]);
+    const child = stringify(o[0], o[1]);
     out += `${child}`;
   });
 
