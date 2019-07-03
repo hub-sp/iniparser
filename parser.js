@@ -22,7 +22,9 @@ const parse = (data, delimeter = '\n') => {
   let tmp = out;
   let sect = null;
 
+  const ESCAPED = /\\(?!\\)/g;
   const COMMENT = /^[;#]/;
+  const PART_COMMENT = /(?<!\\)[;#]/;
   const SECTION = /^\[[^\]]*\]$/;
   const PARAM = /^[^=]+=.*$/;
 
@@ -30,6 +32,14 @@ const parse = (data, delimeter = '\n') => {
 
   for (let line of lines) {
     if (!line || COMMENT.test(line)) continue;
+    if (PART_COMMENT.test(line)) {
+      const comment_semi = line.indexOf(';');
+      const comment_hash = line.indexOf('#');
+      const comment_char = comment_semi !== -1 ? comment_semi : comment_hash;
+      line = line.substring(0, comment_char);
+    }
+
+    line = line.replace(ESCAPED, '').replace(/\\(?=\\)/g, '');
 
     if (/^\s*\[(scope\s?=\s?)?global\]/.test(line)) {
       sect = null;

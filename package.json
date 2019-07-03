@@ -1,6 +1,6 @@
 {
   "name": "@yaas/iniparser",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": ".ini file parser",
   "main": "parser.js",
   "scripts": {
