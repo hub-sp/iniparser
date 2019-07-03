@@ -10,6 +10,39 @@ const config = ini.parse('./config.ini', '\n'); // By default the eol is \n, but
 fs.writeFileSync('./other_config.ini', ini.stringify(config), 'utf8');
 ```
 
+## Valid `.ini` config to JS object
+
+```ini
+; This is a comment
+# This is also a comment
+key = value ; This is an invalid comment, will get to supporting this soon
+[scope=global]
+globalBool
+[user]
+name = Sam Price
+[user.data]
+someDataKey = dataProp
+[global]
+name = iniFile
+```
+
+Is transformed into
+
+```js
+// Assuming you parsed it correctly into the variable `config`
+const config = {
+  key: 'value',
+  globalBool: true,
+  name: 'iniFile',
+  user: {
+    name: 'Sam Price',
+    data: {
+      someDataKey: 'dataProp'
+    }
+  }
+};
+```
+
 ## License
 
 MIT
