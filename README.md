@@ -24,6 +24,9 @@ name = Sam Price
 someDataKey = dataProp
 [global]
 name = iniFile
+
+arr[] = value1 ; value at index 0
+arr[] = value2 ; value at index 1
 ```
 
 Is transformed into
@@ -34,6 +37,7 @@ const config = {
   key: 'value',
   globalBool: true,
   name: 'iniFile',
+  arr: ['value1', 'value2'],
   user: {
     name: 'Sam Price',
     data: {
