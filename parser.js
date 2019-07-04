@@ -19,8 +19,9 @@ const _addNested = (obj, is, value) => {
 
 const parse = (data, delimeter = '\n') => {
   let out = {};
-  let tmp = out;
   let sect = null;
+  let arr = {};
+  let tmp = {};
 
   const ESCAPED = /\\(?!\\)/g;
   const COMMENT = /^[;#]/;
@@ -53,6 +54,13 @@ const parse = (data, delimeter = '\n') => {
       _addNested(out, sect, {});
     } else if (PARAM.test(line)) {
       const p = _getParam(line);
+      if (p[0].endsWith('[]')) {
+        let name = p[0].substring(0, p[0].length - 2);
+        arr[name] = tmp[name] || [];
+        arr[name].push(p[1]);
+        tmp[name] = arr[name];
+        continue;
+      }
       if (!sect) {
         out[p[0]] = p[1];
       } else {
@@ -65,6 +73,11 @@ const parse = (data, delimeter = '\n') => {
         _addNested(out, sect.concat(line), true);
       }
     }
+  }
+  if (Object.keys(arr).length >= 1) {
+    Object.keys(arr).forEach(k => {
+      out[k] = arr[k];
+    });
   }
   return out;
 };
