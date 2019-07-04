@@ -47,7 +47,7 @@ const config = {
 };
 ```
 
-NOTE: `Number`s, `Set`s, `Bigint`s, `NaN` or `false`
+NOTE: `Number`s, `Set`s, `Bigint`s, `NaN` or `false` are not supported to be parsed
 
 ## License
 
