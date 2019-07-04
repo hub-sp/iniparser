@@ -3,7 +3,7 @@
 const { writeFileSync } = require('fs');
 
 const _getSect = line => {
-  line.substring(1, line.length - 1);
+  return line.substring(1, line.length - 1);
 };
 
 const _getParam = line => {

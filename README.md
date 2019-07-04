@@ -15,7 +15,7 @@ fs.writeFileSync('./other_config.ini', ini.stringify(config), 'utf8');
 ```ini
 ; This is a comment
 # This is also a comment
-key = value ; This is an invalid comment, will get to supporting this soon
+key = value ; This is now valid
 [scope=global]
 globalBool
 [user]
