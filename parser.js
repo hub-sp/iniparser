@@ -11,9 +11,7 @@ const _getParam = line => {
 };
 
 const _addNested = (obj, is, value) => {
-  if (typeof is == 'string') return _addNested(obj, is.split('.'), value);
-  else if (is.length == 1 && value !== undefined) return (obj[is[0]] = value);
-  else if (is.length == 0) return obj;
+  if (is.length == 1 && value !== undefined) return (obj[is[0]] = value);
   else return _addNested(obj[is[0]], is.slice(1), value);
 };
 
@@ -74,49 +72,47 @@ const parse = (data, delimeter = '\n') => {
       }
     }
   }
-  if (Object.keys(arr).length >= 1) {
-    Object.keys(arr).forEach(k => {
-      out[k] = arr[k];
-    });
-  }
+
+  Object.keys(arr).forEach(k => {
+    out[k] = arr[k];
+  });
+
   return out;
 };
 
-// const stringify = (obj = {}, section = '') => {
-//   let children = [];
-//   let out = '';
+const stringify = (obj = {}, section) => {
+  const children = [];
+  let out = '';
 
-//   Object.keys(obj).forEach(k => {
-//     let val = obj[k];
+  Object.keys(obj).forEach(k => {
+    const val = obj[k];
+    if (Array.isArray(val)) {
+      val.forEach(item => {
+        out += `${k}[] = ${item}\n`;
+      });
+    } else if (typeof val === 'object') {
+      children.push(k);
+    } else {
+      if (val === true) {
+        out += `${k}\n`;
+      } else {
+        out += `${k} = ${val}\n`;
+      }
+    }
+  });
 
-//     if (val && Array.isArray(val)) {
-//       val.forEach(v => {
-//         out += `${k}[] = ${v}\n`;
-//       });
-//     } else if (val && typeof val === 'object') {
-//       out += `[${section}${section.length ? '.' : ''}${k}]\n`;
-//       children.push([val, k]);
-//     } else {
-//       if (val === true) {
-//         out += `${k}\n`;
-//       } else {
-//         out = `${k} = ${val}\n`;
-//       }
-//     }
-//   });
-//   // START CHILDREN MANIPULATION
+  if (section) out = `[${section}]\n` + out;
 
-//   children.forEach(o => {
-//     const child = stringify(o[0], o[1]);
-//     out += `${child}`;
-//   });
+  children.forEach(k => {
+    const sect = (section ? section + '.' : '') + k;
+    const child = stringify(obj[k], sect);
+    out += child;
+  });
 
-//   // END CHILDREN MANIPULATION
-
-//   return out;
-// };
+  return out;
+};
 
 module.exports = {
   parse,
-  // stringify,
+  stringify,
 };

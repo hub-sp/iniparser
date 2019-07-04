@@ -31,6 +31,7 @@ describe('#parse', () => {
     assert.deepStrictEqual(obj, {
       bool: true,
       user: {
+        bool: true,
         name: 'Sam',
       },
       fool: 'otherName',
@@ -38,10 +39,10 @@ describe('#parse', () => {
   });
 });
 
-// describe('#stringify', () => {
-//   it('stringifies correctly', () => {
-//     assert.strictEqual(ini.stringify(comments), 'inline\n');
-//     assert.strictEqual(ini.stringify(array), arrData + '\n');
-//     assert.strictEqual(ini.stringify(obj), 'bool\n[user]\nname = Sam\nfool = otherName\n');
-//   });
-// });
+describe('#stringify', () => {
+  it('stringifies correctly', () => {
+    assert.strictEqual(ini.stringify(comments), 'inline\n');
+    assert.strictEqual(ini.stringify(array), arrData + '\n');
+    assert.strictEqual(ini.stringify(obj), 'bool\nfool = otherName\n[user]\nbool\nname = Sam\n');
+  });
+});
