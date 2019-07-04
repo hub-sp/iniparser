@@ -47,6 +47,8 @@ const config = {
 };
 ```
 
+NOTE: `Number`s, `Set`s, `Bigint`s, `NaN` or `false`
+
 ## License
 
 MIT
