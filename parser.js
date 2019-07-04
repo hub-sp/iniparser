@@ -37,7 +37,7 @@ const parse = (data, delimeter = '\n') => {
       const comment_semi = line.indexOf(';');
       const comment_hash = line.indexOf('#');
       const comment_char = comment_semi !== -1 ? comment_semi : comment_hash;
-      line = line.substring(0, comment_char);
+      line = line.substring(0, comment_char).trim();
     }
 
     line = line.replace(ESCAPED, '').replace(/\\(?=\\)/g, '');
@@ -82,41 +82,41 @@ const parse = (data, delimeter = '\n') => {
   return out;
 };
 
-const stringify = (obj = {}, section = '') => {
-  let children = [];
-  let out = '';
+// const stringify = (obj = {}, section = '') => {
+//   let children = [];
+//   let out = '';
 
-  Object.keys(obj).forEach(k => {
-    let val = obj[k];
+//   Object.keys(obj).forEach(k => {
+//     let val = obj[k];
 
-    if (val && Array.isArray(val)) {
-      val.forEach(v => {
-        out += `${k}[] = ${v}\n`;
-      });
-    } else if (val && typeof val === 'object') {
-      out += `[${section}${section.length ? '.' : ''}${k}]\n`;
-      children.push([val, k]);
-    } else {
-      if (val === true) {
-        out += `${k}\n`;
-      } else {
-        out = `${k} = ${val}\n`;
-      }
-    }
-  });
-  // START CHILDREN MANIPULATION
+//     if (val && Array.isArray(val)) {
+//       val.forEach(v => {
+//         out += `${k}[] = ${v}\n`;
+//       });
+//     } else if (val && typeof val === 'object') {
+//       out += `[${section}${section.length ? '.' : ''}${k}]\n`;
+//       children.push([val, k]);
+//     } else {
+//       if (val === true) {
+//         out += `${k}\n`;
+//       } else {
+//         out = `${k} = ${val}\n`;
+//       }
+//     }
+//   });
+//   // START CHILDREN MANIPULATION
 
-  children.forEach(o => {
-    const child = stringify(o[0], o[1]);
-    out += `${child}`;
-  });
+//   children.forEach(o => {
+//     const child = stringify(o[0], o[1]);
+//     out += `${child}`;
+//   });
 
-  // END CHILDREN MANIPULATION
+//   // END CHILDREN MANIPULATION
 
-  return out;
-};
+//   return out;
+// };
 
 module.exports = {
   parse,
-  stringify,
+  // stringify,
 };
